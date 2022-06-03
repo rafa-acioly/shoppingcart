@@ -1,5 +1,6 @@
 from typing import List
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from http import HTTPStatus
 
 from shoppingcart.entities import ProductRequest, ProductResponse
 from tools import fake_products
@@ -29,7 +30,14 @@ async def update(
     pass
 
 
-@app.delete("/cart/{product_id}")
+@app.delete("/cart/{product_id}", status_code=HTTPStatus.OK)
 async def delete(product_id: str):
     """Remove a product from the cart."""
-    pass
+    for product in fake_products:
+        if product.product_id == product_id:
+            return fake_products.remove(product)
+
+    raise HTTPException(
+        status_code=HTTPStatus.NOT_MODIFIED,
+        detail="Product not found"
+    )
