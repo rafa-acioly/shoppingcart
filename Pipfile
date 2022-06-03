@@ -9,6 +9,7 @@ fastapi = "*"
 [dev-packages]
 flake8 = "*"
 isort = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"
