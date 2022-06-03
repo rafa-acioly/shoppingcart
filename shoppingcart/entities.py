@@ -1,7 +1,8 @@
 from pydantic import BaseModel
+from decimal import Decimal
 
 
-class CartProduct(BaseModel):
+class Product(BaseModel):
     product_id: str
     quantity: int
-    price: float
+    price: Decimal
