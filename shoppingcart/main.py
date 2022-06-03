@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Path
 from http import HTTPStatus
 
 from shoppingcart.entities import ProductRequest, ProductResponse
@@ -23,15 +23,17 @@ async def create(product: ProductRequest) -> ProductResponse:
 
 @app.patch("/cart/{product_id}")
 async def update(
-    product_id: str,
-    product_cart: ProductRequest
+    product_cart: ProductRequest,
+    product_id: str = Path(description="ID of the product to update"),
 ) -> ProductRequest:
     """Update a product on the cart."""
     pass
 
 
 @app.delete("/cart/{product_id}", status_code=HTTPStatus.OK)
-async def delete(product_id: str):
+async def delete(
+    product_id: str = Path(description="ID of the product to delete from the cart")  # noqa: E501
+) -> None:
     """Remove a product from the cart."""
     for product in fake_products:
         if product.product_id == product_id:
