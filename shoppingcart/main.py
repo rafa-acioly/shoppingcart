@@ -35,7 +35,7 @@ async def delete(
     product_sku: str = Path(description="Unique identifier of the product to delete from the cart")  # noqa: E501
 ) -> None:
     """Remove a product from the cart."""
-    if not cart_service.contains(product_sku):
+    if not cart_service.remove(product_sku):
         raise HTTPException(
             status_code=HTTPStatus.NOT_MODIFIED,
             detail=f"Product with sku: {product_sku} not found on the cart."
