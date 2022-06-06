@@ -1,5 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
+from http import HTTPStatus
 
 from shoppingcart.main import app
 from tools import fake_cart
@@ -22,7 +23,7 @@ def clean_cart():
 def test_can_get_empty_cart():
     response = client.get("/cart")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
 
 
 def test_can_add_product_to_cart_and_retrieve_it(request_payload):
@@ -30,13 +31,19 @@ def test_can_add_product_to_cart_and_retrieve_it(request_payload):
 
     response = client.get("/cart")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
 
 
 def test_can_add_product_to_cart(request_payload):
     response = client.put("/cart", request_payload.json())
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_cannot_add_product_to_cart_when_bad_request(request_payload):
+    response = client.put("/cart", json={"sku": "123", "quantity": "a", "price": 10})
+
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
 
 def test_can_update_product_in_cart(request_payload):
@@ -46,7 +53,7 @@ def test_can_update_product_in_cart(request_payload):
 
     response = client.put(f"/cart", json=update_request.dict())
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
 
 
 def test_can_delete_product_from_cart(request_payload):
@@ -54,13 +61,19 @@ def test_can_delete_product_from_cart(request_payload):
 
     response = client.delete(f"/cart/product/{request_payload.sku}")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_cannot_delete_discount_from_cart_if_not_found():
+    response = client.delete("/cart/product/random-code")
+
+    assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
 def test_cannot_delete_product_from_cart_if_not_found():
     response = client.delete(f"/cart/product/random-sku-code")
 
-    assert response.status_code == 304
+    assert response.status_code == HTTPStatus.NOT_MODIFIED
 
 
 def test_can_delete_all_products_from_cart(request_payload):
@@ -68,7 +81,7 @@ def test_can_delete_all_products_from_cart(request_payload):
 
     response = client.delete("/cart")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
 
 
 def test_can_add_discount_to_cart(request_payload):
@@ -76,4 +89,4 @@ def test_can_add_discount_to_cart(request_payload):
 
     response = client.post("/cart/discount", json={"code": "10OFF"})
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
