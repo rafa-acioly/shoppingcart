@@ -2,9 +2,6 @@ from decimal import Decimal
 from tools.schemas import Cart, Discount
 
 
-"""
-fake_cart is a representation of the cart service with a fake database connection.
-"""
 fake_cart = Cart(products=[])
 
 fake_discounts = [

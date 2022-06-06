@@ -14,7 +14,7 @@ async def index() -> Cart:
     return cart_service
 
 
-@app.put("/cart/{product_sku}")
+@app.put("/cart/{product_sku}", response_model=Cart)
 async def upsert(
     product_cart: ProductRequest,
     product_sku: str = Path(description="Unique identifier of the product to update"),
