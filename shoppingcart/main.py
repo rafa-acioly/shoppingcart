@@ -39,7 +39,6 @@ async def delete(
             detail=f"Product with sku: {product_sku} not found on the cart."
         )
 
-    cart_service.remove_product(product_sku)
 
 
 @app.post("/cart/discount", response_model=Cart)
