@@ -7,8 +7,7 @@ from decimal import Decimal
 
 
 class Discount(BaseModel):
-    discount_id: str
-    amount: Decimal
+    code: str
 
 
 class ProductRequest(BaseModel):
