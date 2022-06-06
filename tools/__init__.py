@@ -1,6 +1,6 @@
 from decimal import Decimal
-from tools.schemas import Cart, Discount
 
+from tools.schemas import Cart, Discount
 
 fake_cart = Cart(products=[])
 

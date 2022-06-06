@@ -1,11 +1,11 @@
+from http import HTTPStatus
+
 import pytest
 from fastapi.testclient import TestClient
-from http import HTTPStatus
 
 from shoppingcart.main import app
 from tools import fake_cart
 from tools.schemas import ProductRequest
-
 
 client = TestClient(app)
 
@@ -51,7 +51,7 @@ def test_can_update_product_in_cart(request_payload):
 
     update_request = ProductRequest(sku=request_payload.sku, quantity=2, price=request_payload.price)
 
-    response = client.put(f"/cart", json=update_request.dict())
+    response = client.put("/cart", json=update_request.dict())
 
     assert response.status_code == HTTPStatus.OK
 
@@ -71,7 +71,7 @@ def test_cannot_delete_discount_from_cart_if_not_found():
 
 
 def test_cannot_delete_product_from_cart_if_not_found():
-    response = client.delete(f"/cart/product/random-sku-code")
+    response = client.delete("/cart/product/random-sku-code")
 
     assert response.status_code == HTTPStatus.NOT_MODIFIED
 

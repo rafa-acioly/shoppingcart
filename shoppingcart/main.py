@@ -1,9 +1,10 @@
-from typing import List
-from fastapi import FastAPI, HTTPException, Path
 from http import HTTPStatus
 
-from tools import fake_cart as cart_service, fake_discounts as discount_service
-from tools.schemas import DiscountRequest, ProductRequest, Cart
+from fastapi import FastAPI, HTTPException, Path
+
+from tools import fake_cart as cart_service
+from tools import fake_discounts as discount_service
+from tools.schemas import Cart, DiscountRequest, ProductRequest
 
 app = FastAPI()
 
@@ -44,13 +45,13 @@ async def delete(
 @app.post("/cart/discount", response_model=Cart)
 async def add_discount(requested_discount: DiscountRequest) -> Cart:
     """Add a discount to the cart."""
-    discount = [coupon for coupon in discount_service if coupon.code == requested_discount.code]
+    discount = [coupon for coupon in discount_service if coupon.code == requested_discount.code]  # noqa: E501
     if not discount:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail=f"Discount with code: {discount.code} not found."
         )
-    
+
     discount_founded = discount[0]
     if not discount_founded.enabled:
         raise HTTPException(

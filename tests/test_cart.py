@@ -1,5 +1,6 @@
 from decimal import Decimal
-from tools.schemas import Cart, ProductRequest, Discount
+
+from tools.schemas import Cart, Discount, ProductRequest
 
 
 def test_can_add_product():

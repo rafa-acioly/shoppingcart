@@ -1,14 +1,13 @@
-from gc import enable
-from pydantic import BaseModel, Field, PositiveInt, condecimal
-
 import uuid
-from typing import List
-from pydantic import BaseModel
 from decimal import Decimal
+from typing import List
+
+from pydantic import BaseModel, Field
 
 
 class DiscountRequest(BaseModel):
     code: str
+
 
 class Discount(BaseModel):
     code: str
@@ -35,7 +34,7 @@ class Cart(BaseModel):
             for product in self.products
         ))
         self.refresh_subtotal()
-    
+
     def refresh_subtotal(self):
         self.subtotal = self.total - Decimal(sum(
             discount.amount
@@ -44,7 +43,7 @@ class Cart(BaseModel):
 
         if self.subtotal < 0:
             self.subtotal = Decimal("0.00")
-    
+
     def upsert_product(self, product: ProductRequest):
         for product_ in self.products:
             if product_.sku == product.sku:
@@ -65,9 +64,9 @@ class Cart(BaseModel):
                 self.products.remove(product)
                 self.refresh_total()
                 return True
-        
+
         return False
-    
+
     def flush(self):
         self.products = []
         self.discounts = []
