@@ -2,6 +2,16 @@
 
 A simple implementation of a shopping cart using FastAPI.
 
+## How to Install:
+
+1. Download and upgrade pip
+    - [python3 -m ensurepip --upgrade](https://pip.pypa.io/en/stable/)
+2. Create a virtual environment and activate it
+    - [python3 -m venv venv](https://docs.python.org/3/tutorial/venv.html)
+    - source venv/bin/activate
+2. Install the dependencies:
+    - [python3 -m pip install -r requirements/dev.txt](https://pip.pypa.io/en/stable/installing/)
+
 ## How to run:
 ```
 make run
