@@ -3,11 +3,10 @@ FROM python:3.8-slim
 RUN pip install pipenv
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
-
-COPY Pipfile Pipfile.lock ./
+COPY requirements/requirements.txt ./
 
 RUN python -m pip install --upgrade pip
-RUN pip install pipenv && pipenv install --dev --system --deploy
+RUN pip install -r requirements.txt
 
 WORKDIR /app
 COPY . /app
