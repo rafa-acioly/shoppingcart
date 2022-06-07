@@ -1,5 +1,4 @@
 from http import HTTPStatus
-
 import pytest
 from fastapi.testclient import TestClient
 
@@ -40,7 +39,7 @@ def test_can_add_product_to_cart(request_payload):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_cannot_add_product_to_cart_when_bad_request(request_payload):
+def test_cannot_add_product_to_cart_when_bad_request():
     response = client.put("/cart", json={"sku": "123", "quantity": "a", "price": 10})
 
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -90,3 +89,19 @@ def test_can_add_discount_to_cart(request_payload):
     response = client.post("/cart/discount", json={"code": "10OFF"})
 
     assert response.status_code == HTTPStatus.OK
+
+
+def test_cannot_add_discount_that_does_not_exist(request_payload):
+    client.put("/cart", request_payload.json())
+
+    response = client.post("/cart/discount", json={"code": "RANDOM-DISCOUNT"})
+
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    
+
+def test_cannot_add_disabled_discount(request_payload):
+    client.put("/cart", request_payload.json())
+
+    response = client.post("/cart/discount", json={"code": "30OFF"})
+
+    assert response.status_code == HTTPStatus.BAD_REQUEST

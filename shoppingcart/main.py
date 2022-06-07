@@ -48,14 +48,14 @@ async def add_discount(requested_discount: DiscountRequest) -> Cart:
     if not discount:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail=f"Discount with code: {discount.code} not found."
+            detail=f"Discount with code: {requested_discount.code} not found."
         )
 
     discount_founded = discount[0]
     if not discount_founded.enabled:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
-            detail=f"Discount with code: {discount.code} is disabled."
+            detail=f"Discount with code: {requested_discount.code} is disabled."
         )
 
     cart_service.add_discount(discount_founded)
